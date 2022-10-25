@@ -1,6 +1,6 @@
 
 BUSY = 1
-
+NOT_BUSY = 0
 class Teller ():
     def __init__(self,name):
         self.name = name
@@ -9,8 +9,14 @@ class Teller ():
 
     def setCustomer(self,customer):
         self.customer = customer
+        if customer == None:
+            self.setIsBusy(NOT_BUSY)
+        else:
+            self.setIsBusy(BUSY)
 
     def getDepartureTime(self):
+        if self.customer == None:
+            return float("inf")
         return self.customer.getDepartureTime()
 
     def getIsBusy(self):
@@ -18,5 +24,9 @@ class Teller ():
 
     def setIsBusy(self,value):
         self.isBusy = value
+
+    def getName(self):
+        return self.name
+    
 
 

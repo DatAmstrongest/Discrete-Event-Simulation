@@ -20,3 +20,5 @@ class Queue ():
 
     def getSize(self):
         return self.sizeOfQueue
+    def getQueue(self):
+        return self.queue
