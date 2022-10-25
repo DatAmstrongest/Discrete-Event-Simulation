@@ -1,7 +1,14 @@
 from Queue import Queue
+from Customer import Customer
 
 
-myQueue = Queue(20)
-myQueue.enqueueCustomer(10)
-print(myQueue.dequeueCustomer())
-print(myQueue.dequeueCustomer())
+myQueue = Queue()
+myCustomer = Customer(1,5)
+
+myCustomer.setTeller("Ahmet")
+print(myCustomer.getTeller())
+myCustomer.setWaitingTime(5)
+print(myCustomer.getWaitingTime())
+print(myCustomer.getDepartureTime())
+myQueue.enqueueCustomer(myCustomer)
+print(myQueue.dequeueCustomer().getTeller())

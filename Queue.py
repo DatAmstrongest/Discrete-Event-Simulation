@@ -1,6 +1,6 @@
 class Queue ():
     
-    def __init__(self,capacity):
+    def __init__(self):
         self.queue = []
         self.startIndex = -1
         self.sizeOfQueue = 0
