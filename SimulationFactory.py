@@ -9,6 +9,7 @@ class SimulationFactory():
         self.teller1 = Teller("Metehan")
         self.teller2 = Teller("Ahmet")
         self.customerQueue = Queue()
+        self.leftQueue = Queue()
         self.idleCustomer = None
 
     def startSimulation(self,simulationTime):
@@ -30,20 +31,31 @@ class SimulationFactory():
     def makeTellerIdle(self,teller):
         self.clock = teller.getDepartureTime()
         teller.setCustomer(None)
+        teller.setIsBusy(NOT_BUSY)
 
     def addCustomer(self):
         self.clock = self.idleCustomer.getArrivalTime()
-        self.customerQueue.enqueueCustomer(self.idleCustomer)
-        self.idleCustomer = None
-        if self.customerQueue.getSize()-1 >= 5: 
+        if self.customerQueue.getSize() >= 5: 
             if np.random.choice([0,1],p=[0.4,0.6])==1:
-                leftCustomer = self.customerQueue.dequeueCustomer()
-                leftCustomer.setIsLeft(LEFT)
+                self.idleCustomer.setIsLeft(LEFT)
+                self.leftQueue.enqueueCustomer(self.idleCustomer)
+                self.idleCustomer = None
+            else:
+                self.customerQueue.enqueueCustomer(self.idleCustomer)
+                self.idleCustomer = None
                 
-        elif self.customerQueue.getSize()-1 == 4:
+        elif self.customerQueue.getSize() == 4:
             if np.random.choice([0,1])==1:
-                leftCustomer = self.customerQueue.dequeueCustomer()
-                leftCustomer.setIsLeft(LEFT)
+                self.idleCustomer.setIsLeft(LEFT)
+                self.leftQueue.enqueueCustomer(self.idleCustomer)
+                self.idleCustomer = None
+            else:
+                self.customerQueue.enqueueCustomer(self.idleCustomer)
+                self.idleCustomer = None
+        else:
+            self.customerQueue.enqueueCustomer(self.idleCustomer)
+            self.idleCustomer = None
+
 
         self.assignCustomerToTeller()
 
@@ -86,10 +98,12 @@ class SimulationFactory():
         return self.clock + (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 3)
     
     def generateServingTimeForTeller1(self):                                #function to generate service time for teller 1 using inverse trnasform
-        return self.clock + (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.2)
+        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.2)
 
     def generateServingTimeForTeller2(self):                                #function to generate service time for teller 1 using inverse trnasform
-        return self.clock + (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.5)
+        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.5)
 
-    def getQueue(self):
+    def getCustomerQueue(self):
         return self.customerQueue.getQueue()
+    def getLeftQueue(self):
+        return self.leftQueue.getQueue()
