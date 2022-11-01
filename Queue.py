@@ -2,7 +2,7 @@ class Queue ():
     
     def __init__(self):
         self.queue = []
-        self.startIndex = -1
+        self.startIndex = 0
         self.sizeOfQueue = 0
 
     def enqueueCustomer (self,customer):
