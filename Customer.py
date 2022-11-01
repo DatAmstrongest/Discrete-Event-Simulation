@@ -10,8 +10,8 @@ class Customer():
         self.servingTime = 0
         self.departureTime = 0
         self.waitingTime  = 0
-        self.isLeft = not LEFT 
-        self.isJobDone = not JOB_DONE
+        self.isLeft = 0 
+        self.isJobDone = 0
 
     def getServingTime(self):
         return self.servingTime
