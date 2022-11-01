@@ -16,9 +16,9 @@ class SimulationFactory():
         while self.clock <= simulationTime:
             self.advanceTime()
 
-    def advanceTime(self):
+    def advanceTime(self): 
         if self.idleCustomer == None:
-            arrivalTime = self.generateArrivalTime()
+            arrivalTime =  self.generateArrivalTime()
             self.idleCustomer = Customer(arrivalTime)
         if self.idleCustomer.getArrivalTime() < self.teller1.getDepartureTime() and self.idleCustomer.getArrivalTime() < self.teller2.getDepartureTime(): 
             self.addCustomer()
@@ -30,8 +30,7 @@ class SimulationFactory():
 
     def makeTellerIdle(self,teller):
         self.clock = teller.getDepartureTime()
-        teller.setCustomer(None)
-        teller.setIsBusy(NOT_BUSY)
+        teller.leaveCustomer()
 
     def addCustomer(self):
         self.clock = self.idleCustomer.getArrivalTime()

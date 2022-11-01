@@ -1,10 +1,10 @@
-
+from Customer import JOB_DONE, Customer
 BUSY = 1
 NOT_BUSY = 0
 class Teller ():
     def __init__(self,name):
         self.name = name
-        self.isBusy = 0
+        self.isBusy = NOT_BUSY
         self.customer = None
 
     def setCustomer(self,customer):
@@ -13,6 +13,11 @@ class Teller ():
             self.setIsBusy(NOT_BUSY)
         else:
             self.setIsBusy(BUSY)
+
+    def leaveCustomer(self):
+        self.isBusy = NOT_BUSY
+        self.customer.setIsJobDone(JOB_DONE)
+        self.customer = None
 
     def getDepartureTime(self):
         if self.customer == None:

@@ -1,3 +1,4 @@
+from Customer import JOB_DONE
 from SimulationFactory import SimulationFactory 
 import csv
 
@@ -13,8 +14,9 @@ with open("customers.csv", "w") as stream1:
     writer = csv.writer(stream1)
     writer.writerow(customerHeader)
     for customer in simulation.getCustomerQueue():
-        row = customer_to_tuple(customer)
-        writer.writerow(row)
+        if customer.getIsJobDone() == JOB_DONE:
+            row = customer_to_tuple(customer)
+            writer.writerow(row)
     for customer in simulation.getLeftQueue():
         row = customer_to_tuple(customer)
         writer.writerow(row)

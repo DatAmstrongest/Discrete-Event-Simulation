@@ -1,4 +1,7 @@
 LEFT = 1
+JOB_DONE = 1
+
+
 
 class Customer():
     def __init__(self,arrivalTime):
@@ -7,7 +10,8 @@ class Customer():
         self.servingTime = 0
         self.departureTime = 0
         self.waitingTime  = 0
-        self.isLeft = 0 # 0 means customer didn't leave the bank
+        self.isLeft = not LEFT 
+        self.isJobDone = not JOB_DONE
 
     def getServingTime(self):
         return self.servingTime
@@ -23,20 +27,19 @@ class Customer():
 
     def setWaitingTime(self,clock):
         self.waitingTime = clock - self.arrivalTime
-        self.setDepartureTime(clock)
+        self.setDepartureTime()
 
-    def getDepartureTime(self,):
+    def getDepartureTime(self):
         return self.departureTime
 
-    def setDepartureTime(self,clock):
+    def setDepartureTime(self):
         self.departureTime = self.arrivalTime + self.waitingTime + self.servingTime
-
-
-    def setTeller(self,teller):
-        self.teller = teller
 
     def getTeller(self):
         return self.teller
+    
+    def setTeller(self,teller):
+        self.teller = teller
 
     def getIsLeft(self):
         return self.isLeft
@@ -44,9 +47,11 @@ class Customer():
     def setIsLeft(self,isLeft) :
         self.isLeft = isLeft
 
-
-
+    def getIsJobDone(self):
+        return self.isJobDone
     
-        
+    def setIsJobDone(self,value):
+        self.isJobDone = value
+      
         
         
