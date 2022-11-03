@@ -25,7 +25,6 @@ streamCustomer.close()
 
 countedHeader = ["# Arrived", "# Lost", "# Attended the Queue", "# in Queue", "# in System","served"]
 
-
 with open("counted.csv","w") as streamCounted:
     writer = csv.writer(streamCounted)
     writer.writerow(countedHeader)
@@ -53,5 +52,45 @@ with open("counted.csv","w") as streamCounted:
         attendedTheQueue = arrived - lost
         inSystem = inQueue + inService
         writer.writerow((arrived, lost, attendedTheQueue, inQueue, inSystem,served))
+
+averageHeader = ["Average Interarrival Time", "Average Waiting Time", "Average Service Time", "Average Total time in System"]
+
+with open("average.csv","w") as streamAverage:
+    writer = csv.writer(streamAverage)
+    writer.writerow(averageHeader)
+    for i in range(10):
+        simulation = SimulationFactory()
+        simulation.startSimulation(240)
+
+        customerQueue = simulation.getCustomerQueue()
+
+        totalInterarrival = 0
+        totalWaitingTime = 0
+        totalServiceTime = 0
+        totalTimeInSystem = 0
+        totalCustomers = len(customerQueue)
+
+
+        for index in range(totalCustomers):
+
+            customer = customerQueue[index]
+            if index == 0:
+                totalInterarrival += customer.getArrivalTime()
+            else:
+                previousCustomer = customerQueue[index-1]
+                totalInterarrival +=  customer.getArrivalTime() - previousCustomer.getArrivalTime()
             
+            totalWaitingTime += customer.getWaitingTime()
+            totalServiceTime += customer.getServingTime()
+            totalTimeInSystem += customer.getDepartureTime() - customer.getArrivalTime()
+    
+    averageInterarrivalTime = totalInterarrival/totalCustomers
+    averageWaitingTime = totalWaitingTime/totalCustomers
+    averageServiceTime = totalServiceTime/totalCustomers
+    averageTimeInSystem = totalTimeInSystem/totalCustomers
+
+    writer.writerow((averageInterarrivalTime, averageWaitingTime, averageServiceTime, averageTimeInSystem))
+
+
+
 
