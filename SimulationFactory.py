@@ -30,6 +30,7 @@ class SimulationFactory():
 
     def makeTellerIdle(self,teller):
         self.clock = teller.getDepartureTime()
+        teller.increaseServingTime()
         teller.leaveCustomer()
 
     def addCustomer(self):
@@ -97,12 +98,21 @@ class SimulationFactory():
         return self.clock + (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 3)
     
     def generateServingTimeForTeller1(self):                                #function to generate service time for teller 1 using inverse trnasform
-        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.2)
+        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 12)
 
     def generateServingTimeForTeller2(self):                                #function to generate service time for teller 1 using inverse trnasform
-        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.5)
+        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 15)
 
     def getCustomerQueue(self):
         return self.customerQueue.getQueue()
+
     def getLeftQueue(self):
         return self.leftQueue.getQueue()
+
+    def getTeller1ServingTime(self):
+        return self.teller1.getTotalServingTime()
+
+    def getTeller2ServingTime(self):
+        return self.teller2.getTotalServingTime()
+    
+    

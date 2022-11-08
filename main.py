@@ -53,7 +53,7 @@ with open("counted.csv","w") as streamCounted:
         inSystem = inQueue + inService
         writer.writerow((arrived, lost, attendedTheQueue, inQueue, inSystem,served))
 
-averageHeader = ["Average Interarrival Time", "Average Waiting Time", "Average Service Time", "Average Total time in System"]
+averageHeader = ["Average Interarrival Time", "Average Waiting Time", "Average Service Time", "Average Total time in System", "Utilization of Teller1", "Utilization of Teller2"]
 
 with open("average.csv","w") as streamAverage:
     writer = csv.writer(streamAverage)
@@ -66,7 +66,6 @@ with open("average.csv","w") as streamAverage:
 
         totalInterarrival = 0
         totalWaitingTime = 0
-        totalServiceTime = 0
         totalTimeInSystem = 0
         totalCustomers = len(customerQueue)
 
@@ -81,15 +80,17 @@ with open("average.csv","w") as streamAverage:
                 totalInterarrival +=  customer.getArrivalTime() - previousCustomer.getArrivalTime()
             
             totalWaitingTime += customer.getWaitingTime()
-            totalServiceTime += customer.getServingTime()
             totalTimeInSystem += customer.getDepartureTime() - customer.getArrivalTime()
     
     averageInterarrivalTime = totalInterarrival/totalCustomers
     averageWaitingTime = totalWaitingTime/totalCustomers
-    averageServiceTime = totalServiceTime/totalCustomers
+    averageServiceTime = (simulation.getTeller1ServingTime()+simulation.getTeller2ServingTime())/totalCustomers
     averageTimeInSystem = totalTimeInSystem/totalCustomers
+    
+    teller1Utilization = simulation.getTeller1ServingTime()/240
+    teller2Utilization = simulation.getTeller2ServingTime()/240
 
-    writer.writerow((averageInterarrivalTime, averageWaitingTime, averageServiceTime, averageTimeInSystem))
+    writer.writerow((averageInterarrivalTime, averageWaitingTime, averageServiceTime, averageTimeInSystem, teller1Utilization, teller2Utilization))
 
 
 

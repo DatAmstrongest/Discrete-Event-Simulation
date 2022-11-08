@@ -6,6 +6,7 @@ class Teller ():
         self.name = name
         self.isBusy = NOT_BUSY
         self.customer = None
+        self.totalServingTime = 0
 
     def setCustomer(self,customer):
         self.customer = customer
@@ -32,6 +33,12 @@ class Teller ():
 
     def getName(self):
         return self.name
+
+    def getTotalServingTime(self):
+        return self.totalServingTime
+
+    def increaseServingTime(self):
+        self.totalServingTime += self.customer.getServingTime()
     
 
 
