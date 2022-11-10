@@ -57,42 +57,29 @@ class SimulationFactory():
             self.idleCustomer = None
 
 
-        self.assignCustomerToTeller()
+        self.assignCustomerToTellers()
 
-    def assignCustomerToTeller(self):
+    def assignCustomerToTellers(self):
         while (self.customerQueue.getSize() > 0):
             if self.teller1.getIsBusy() == NOT_BUSY and self.teller2.getIsBusy() == NOT_BUSY:
                 if np.random.choice([0,1])==1:
-                    servingTime = self.generateServingTimeForTeller1()
-                    newCustomer = self.customerQueue.dequeueCustomer()
-                    newCustomer.setTeller(self.teller1.getName())
-                    newCustomer.setServingTime(servingTime)
-                    newCustomer.setWaitingTime(self.clock)
-                    self.teller1.setCustomer(newCustomer)
+                    self.assignCustomerToTeller(self.teller1)
                 else:
-                    servingTime = self.generateServingTimeForTeller2()
-                    newCustomer = self.customerQueue.dequeueCustomer()
-                    newCustomer.setTeller(self.teller2.getName())
-                    newCustomer.setServingTime(servingTime)
-                    newCustomer.setWaitingTime(self.clock)
-                    self.teller2.setCustomer(newCustomer)
-
+                    self.assignCustomerToTeller(self.teller2)
             elif self.teller1.getIsBusy() == NOT_BUSY:
-                servingTime = self.generateServingTimeForTeller1()
-                newCustomer = self.customerQueue.dequeueCustomer()
-                newCustomer.setTeller(self.teller1.getName())
-                newCustomer.setServingTime(servingTime)
-                newCustomer.setWaitingTime(self.clock)
-                self.teller1.setCustomer(newCustomer)
+                self.assignCustomerToTeller(self.teller1)
             elif self.teller2.getIsBusy() == NOT_BUSY:
-                servingTime = self.generateServingTimeForTeller1()
-                newCustomer = self.customerQueue.dequeueCustomer()
-                newCustomer.setTeller(self.teller2.getName())
-                newCustomer.setServingTime(servingTime)
-                newCustomer.setWaitingTime(self.clock)
-                self.teller2.setCustomer(newCustomer)
+                self.assignCustomerToTeller(self.teller2)
             else:
                 break
+
+    def assignCustomerToTeller(self,teller):
+        servingTime = self.generateServingTimeForTeller1()
+        newCustomer = self.customerQueue.dequeueCustomer()
+        newCustomer.setTeller(teller.getName())
+        newCustomer.setServingTime(servingTime)
+        newCustomer.setWaitingTime(self.clock)
+        teller.setCustomer(newCustomer)
 
     def generateArrivalTime(self):                                             #function to generate arrival times using inverse trnasform
         return self.clock + (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 3)
