@@ -1,8 +1,6 @@
 LEFT = 1
 JOB_DONE = 1
 
-
-
 class Customer():
     def __init__(self,arrivalTime):
         self.teller = ""
@@ -12,6 +10,8 @@ class Customer():
         self.waitingTime  = 0
         self.isLeft = 0 
         self.isJobDone = 0
+        self.inQueueArrive = -1
+        self.inQueueLeft = -1
 
     def getServingTime(self):
         return self.servingTime
@@ -52,6 +52,18 @@ class Customer():
     
     def setIsJobDone(self,value):
         self.isJobDone = value
+
+    def getInQueueArrive(self):
+        return self.inQueueArrive
+
+    def setInQueueArrive(self, value):
+        self.inQueueArrive = value
+    
+    def getInQueueLeft(self):
+        return self.inQueueLeft
+
+    def setInQueueLeft(self, value):
+        self.inQueueLeft = value
       
         
         

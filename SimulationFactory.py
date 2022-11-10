@@ -31,14 +31,16 @@ class SimulationFactory():
     def makeTellerIdle(self,teller):
         self.clock = teller.getDepartureTime()
         teller.increaseServingTime()
-        teller.leaveCustomer()
+        teller.leaveCustomer(self.customerQueue.getSize())
 
     def addCustomer(self):
         self.clock = self.idleCustomer.getArrivalTime()
+        self.idleCustomer.setInQueueArrive(self.customerQueue.getSize())
         if self.customerQueue.getSize() >= 5: 
             if np.random.choice([0,1],p=[0.4,0.6])==1:
                 self.idleCustomer.setIsLeft(LEFT)
                 self.leftQueue.enqueueCustomer(self.idleCustomer)
+                self.idleCustomer.setInQueueLeft(self.customerQueue.getSize())
                 self.idleCustomer = None
             else:
                 self.customerQueue.enqueueCustomer(self.idleCustomer)
@@ -46,6 +48,7 @@ class SimulationFactory():
                 
         elif self.customerQueue.getSize() == 4:
             if np.random.choice([0,1])==1:
+                self.idleCustomer.setInQueueLeft(self.customerQueue.getSize())
                 self.idleCustomer.setIsLeft(LEFT)
                 self.leftQueue.enqueueCustomer(self.idleCustomer)
                 self.idleCustomer = None
@@ -55,7 +58,6 @@ class SimulationFactory():
         else:
             self.customerQueue.enqueueCustomer(self.idleCustomer)
             self.idleCustomer = None
-
 
         self.assignCustomerToTellers()
 

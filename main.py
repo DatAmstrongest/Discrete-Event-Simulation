@@ -3,13 +3,13 @@ from SimulationFactory import SimulationFactory
 import csv
 
 def customer_to_tuple(customer):
-    return (customer.getTeller(), customer.getArrivalTime(), customer.getServingTime(),customer.getDepartureTime(), customer.getWaitingTime(), customer.getIsLeft())
+    return (customer.getTeller(), customer.getArrivalTime(), customer.getServingTime(),customer.getDepartureTime(), customer.getWaitingTime(), customer.getIsLeft(), customer.getInQueueArrive(), customer.getInQueueLeft())
 
 
 simulation = SimulationFactory()
 simulation.startSimulation(240)
 
-customerHeader = ['TellerName', 'ArrivalTime', 'ServingTime', 'DepartureTime','WaitingTime',"IsLeft"]
+customerHeader = ['TellerName', 'ArrivalTime', 'ServingTime', 'DepartureTime','WaitingTime',"IsLeft","InQueueArrive","InQueueLeft"]
 with open("customers.csv", "w") as streamCustomer:
     writer = csv.writer(streamCustomer)
     writer.writerow(customerHeader)

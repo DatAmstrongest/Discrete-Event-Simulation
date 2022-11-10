@@ -15,9 +15,10 @@ class Teller ():
         else:
             self.setIsBusy(BUSY)
 
-    def leaveCustomer(self):
+    def leaveCustomer(self,queueSize):
         self.isBusy = NOT_BUSY
         self.customer.setIsJobDone(JOB_DONE)
+        self.customer.setInQueueLeft(queueSize)
         self.customer = None
 
     def getDepartureTime(self):
