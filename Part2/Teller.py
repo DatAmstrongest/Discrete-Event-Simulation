@@ -11,8 +11,14 @@ class Teller():
         self.currentCustomer = None
     
 
-    def setCustomer(self, customer, clock):
+    def getDepartureTime(self):
+        if self.customer == None:
+            return float("inf")
+        return self.currentCustomer.getCurrentDepartureTime()
 
+
+    def setCustomer(self, customer, clock):
+        
         serviceTime = self.generateServingTime()
         waitingTime = clock - self.getCurrentArrivalTime()
         departureTime = clock + serviceTime
@@ -25,7 +31,9 @@ class Teller():
     
     def leaveCustomer(self):
         self.currentCustomer.increaseFinishedJobs()
+        leftCustomer = self.currentCustomer
         self.currentCustomer = None
+        return leftCustomer
 
     def getCustomerFromQueue(self):
 
@@ -34,6 +42,9 @@ class Teller():
             return None
         else:
             self.setCustomer(customer)
+    
+    def addCustomerToQueue(self, customer):
+        self.queue.enqueueCustomer(customer)
 
 
     def getIsBusy(self):
@@ -42,10 +53,13 @@ class Teller():
 
     def getName(self):
         return self.name
-        
+
 
     def generateServingTime(self):                                #function to generate service time for teller 1 using inverse trnasform
         return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 12)
+
+    def getQueue(self):
+        return self.queue.getQueue()
 
     
     

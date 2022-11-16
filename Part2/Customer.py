@@ -1,7 +1,7 @@
 import numpy as np
 
-TYPE1 = [0,1]
-TYPE2 = [1,0]
+TYPE1 = 0
+TYPE2 = 1
 class Customer ():
 
     def __init__(self, type, clock):
