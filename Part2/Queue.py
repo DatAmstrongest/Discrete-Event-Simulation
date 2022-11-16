@@ -12,7 +12,7 @@ class Queue ():
     # If there is not customer, method will return -1.
     def dequeueCustomer(self):
         if self.sizeOfQueue == 0:
-            return - 1
+            return None
         previousIndex = self.startIndex
         self.startIndex += 1
         self.sizeOfQueue -= 1
