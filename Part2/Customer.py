@@ -6,12 +6,13 @@ class Customer ():
 
     def __init__(self, type, clock):
         self.type = type
-        self.arrivalTimes = [self.generateArrivalTime(clock)]
+        self.arrivalTimes = []
         self.departureTimes = []
         self.waitingTimes = []
         self.serviceTimes = []
         self.tellers = []
         self.finishedJobs = 0
+        self.generateArrivalTime(clock)
         
 
     def getType(self):
@@ -48,7 +49,7 @@ class Customer ():
     def getWaitingTimes(self):
         return self.waitingTimes
     
-    def addWaitingTimes(self, waitingTime):
+    def addWaitingTime(self, waitingTime):
         self.waitingTimes.append(waitingTime)
 
 

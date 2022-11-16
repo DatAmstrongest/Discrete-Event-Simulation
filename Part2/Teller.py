@@ -12,7 +12,8 @@ class Teller():
     
 
     def getDepartureTime(self):
-        if self.customer == None:
+        if self.currentCustomer == None:
+
             return float("inf")
         return self.currentCustomer.getCurrentDepartureTime()
 
@@ -20,12 +21,12 @@ class Teller():
     def setCustomer(self, customer, clock):
         
         serviceTime = self.generateServingTime()
-        waitingTime = clock - self.getCurrentArrivalTime()
+        waitingTime = clock - customer.getCurrentArrivalTime()
         departureTime = clock + serviceTime
 
         customer.addWaitingTime(waitingTime)
         customer.addServiceTime(serviceTime)
-        customer.addDepartureTime = departureTime
+        customer.addDepartureTime(departureTime)
 
         self.currentCustomer = customer
     
@@ -35,20 +36,24 @@ class Teller():
         self.currentCustomer = None
         return leftCustomer
 
-    def getCustomerFromQueue(self):
+    def getCustomerFromQueue(self,clock):
+        if self.getIsBusy() == False:
+            customer = self.queue.dequeueCustomer()
+            if customer != None:
+                
+                self.setCustomer(customer, clock)
+            else:
+                return
+            
 
-        customer = self.queue.dequeueCustomer()
-        if customer == None:
-            return None
-        else:
-            self.setCustomer(customer)
     
     def addCustomerToQueue(self, customer):
+        customer.addTeller(self.name)
         self.queue.enqueueCustomer(customer)
 
 
     def getIsBusy(self):
-        return self.customer == None
+        return self.currentCustomer != None
 
 
     def getName(self):
@@ -56,7 +61,7 @@ class Teller():
 
 
     def generateServingTime(self):                                #function to generate service time for teller 1 using inverse trnasform
-        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 12)
+        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.2)
 
     def getQueue(self):
         return self.queue.getQueue()

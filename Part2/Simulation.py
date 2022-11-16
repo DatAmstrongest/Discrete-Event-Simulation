@@ -14,12 +14,13 @@ class Simulation ():
     def startSimulation(self,simulationTime):
         while self.clock <= simulationTime:
             self.advanceTime()
+        return [self.getQueueOfTeller(self.teller1),self.getQueueOfTeller(self.teller2)]
     
     def advanceTime(self): 
         if self.idleCustomer == None:
             type = np.random.choice([TYPE1,TYPE2]) 
             self.idleCustomer = Customer(type,self.clock)
-        if self.idleCustomer.getCurrentArrivalTime() < self.teller1.getDepartureTime() and self.idleCustomer.getArrivalTime() < self.teller2.getDepartureTime(): 
+        if self.idleCustomer.getCurrentArrivalTime() < self.teller1.getDepartureTime() and self.idleCustomer.getCurrentArrivalTime() < self.teller2.getDepartureTime(): 
             self.clock = self.idleCustomer.getCurrentArrivalTime()
             if self.idleCustomer.getType() == TYPE1:
                 self.teller1.addCustomerToQueue(self.idleCustomer)
@@ -31,14 +32,16 @@ class Simulation ():
                 self.clock = self.teller1.getDepartureTime()
                 customer = self.teller1.leaveCustomer()
                 if customer.getFinishedJobs() < 2:
+                    customer.addArrivalTime(self.clock)
                     self.teller2.addCustomerToQueue(customer)
             else:
                 self.clock = self.teller2.getDepartureTime()
                 customer = self.teller2.leaveCustomer()
                 if customer.getFinishedJobs() < 2:
+                    customer.addArrivalTime(self.clock)
                     self.teller1.addCustomerToQueue(customer)
-        self.teller1.getCustomerFromQueue()
-        self.teller2.getCustomerFromQueue()
+        self.teller1.getCustomerFromQueue(self.clock)
+        self.teller2.getCustomerFromQueue(self.clock)
 
     def getQueueOfTeller(self, teller):
         return teller.getQueue()
