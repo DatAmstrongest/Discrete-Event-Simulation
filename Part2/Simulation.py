@@ -1,47 +1,54 @@
 from Teller import Teller
-from Customer import Customer,TYPE1,TYPE2
+from Customer import Customer,TYPES
 
+import heapq
 import numpy as np
+import random
 class Simulation ():
 
-    def __init__(self):
+    def __init__(self, tellerNum):
 
         self.clock = 0
-        self.teller1 = Teller("Metehan")
-        self.teller2 = Teller("Ahmet")
+        self.tellers = []
+        self.sortedTellers = []
+        for i in range(tellerNum):
+            teller = Teller(str(i))
+            self.tellers.append(teller)
+            self.sortedTellers.append(teller)
+         
         self.idleCustomer = None
+        self.tellerNum = tellerNum
     
     def startSimulation(self,simulationTime):
         while self.clock <= simulationTime:
             self.advanceTime()
-        return [self.getQueueOfTeller(self.teller1),self.getQueueOfTeller(self.teller2)]
+        result = []
+        for teller in self.tellers:
+            result.append(self.getQueueOfTeller(teller))
+        return result
     
     def advanceTime(self): 
         if self.idleCustomer == None:
-            type = np.random.choice([TYPE1,TYPE2]) 
+            type = random.sample(TYPES,1)[0]
             self.idleCustomer = Customer(type,self.clock)
-        if self.idleCustomer.getCurrentArrivalTime() < self.teller1.getDepartureTime() and self.idleCustomer.getCurrentArrivalTime() < self.teller2.getDepartureTime(): 
+        heapq.heapify(self.sortedTellers)
+
+        if self.idleCustomer.getCurrentArrivalTime() < self.sortedTellers[0].getDepartureTime(): 
             self.clock = self.idleCustomer.getCurrentArrivalTime()
-            if self.idleCustomer.getType() == TYPE1:
-                self.teller1.addCustomerToQueue(self.idleCustomer)
-            else:
-                self.teller2.addCustomerToQueue(self.idleCustomer)
+            nextTeller = self.idleCustomer.getNextTeller()
+            self.tellers[nextTeller].addCustomerToQueue(self.idleCustomer)
             self.idleCustomer = None
         else:
-            if self.teller1.getDepartureTime() < self.idleCustomer.getCurrentArrivalTime() and self.teller1.getDepartureTime() < self.teller2.getDepartureTime() :
-                self.clock = self.teller1.getDepartureTime()
-                customer = self.teller1.leaveCustomer()
-                if customer.getFinishedJobs() < 2:
-                    customer.addArrivalTime(self.clock)
-                    self.teller2.addCustomerToQueue(customer)
-            else:
-                self.clock = self.teller2.getDepartureTime()
-                customer = self.teller2.leaveCustomer()
-                if customer.getFinishedJobs() < 2:
-                    customer.addArrivalTime(self.clock)
-                    self.teller1.addCustomerToQueue(customer)
-        self.teller1.getCustomerFromQueue(self.clock)
-        self.teller2.getCustomerFromQueue(self.clock)
+            self.clock = self.sortedTellers[0].getDepartureTime()
+            customer = self.sortedTellers[0].leaveCustomer()
+            if customer.getFinishedJobs() < self.tellerNum:
+                customer.addArrivalTime(self.clock)
+                nextTeller = customer.getNextTeller()
+
+                self.tellers[nextTeller].addCustomerToQueue(customer)
+            
+        for teller in self.tellers:
+            teller.getCustomerFromQueue(self.clock)
 
     def getQueueOfTeller(self, teller):
         return teller.getQueue()

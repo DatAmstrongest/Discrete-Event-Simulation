@@ -9,6 +9,11 @@ class Teller():
         self.name = name
         self.queue = Queue()
         self.currentCustomer = None
+
+    def __lt__(self, U):
+        if (self.getDepartureTime() < U.getDepartureTime()):
+            return True
+        return False
     
 
     def getDepartureTime(self):

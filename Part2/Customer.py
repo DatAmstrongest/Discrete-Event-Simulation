@@ -1,7 +1,6 @@
 import numpy as np
 
-TYPE1 = 0
-TYPE2 = 1
+TYPES = [[1,0,3,2],[3,1,2,0],[0,2,3,1],[2,1,0,3]]
 class Customer ():
 
     def __init__(self, type, clock):
@@ -15,8 +14,8 @@ class Customer ():
         self.generateArrivalTime(clock)
         
 
-    def getType(self):
-        return self.type
+    def getNextTeller(self):
+        return self.type[self.finishedJobs]
         
 
     def getCurrentArrivalTime(self):
