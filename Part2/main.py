@@ -15,9 +15,11 @@ with open("customers.csv", "w") as streamCustomer:
     writer = csv.writer(streamCustomer)
     writer.writerow(customerHeader)
     for customer in teller1Queue:
-        row = customer_to_tuple(customer)
-        writer.writerow(row)
+        if customer != None:
+            row = customer_to_tuple(customer)
+            writer.writerow(row)
     for customer in teller2Queue:
-        row = customer_to_tuple(customer)
-        writer.writerow(row)
+        if customer != None:
+            row = customer_to_tuple(customer)
+            writer.writerow(row)
 streamCustomer.close()

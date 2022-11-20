@@ -16,7 +16,10 @@ class Queue ():
         previousIndex = self.startIndex
         self.startIndex += 1
         self.sizeOfQueue -= 1
-        return self.queue[previousIndex]
+        customer = self.queue[previousIndex]
+        if customer.getFinishedJobs() > 0:
+            self.queue[previousIndex] = None
+        return customer 
 
     def getSize(self):
         return self.sizeOfQueue
