@@ -1,14 +1,15 @@
 from Queue import Queue
-from Customer import Customer
+from Customer import Customer,TYPES
 
 import numpy as np
 class Teller():
     
-    def __init__(self, name):
+    def __init__(self, name, processingTimes):
 
         self.name = name
         self.queue = Queue()
         self.currentCustomer = None
+        self.processingTimes = processingTimes
 
     def __lt__(self, U):
         if (self.getDepartureTime() < U.getDepartureTime()):
@@ -25,7 +26,7 @@ class Teller():
 
     def setCustomer(self, customer, clock):
         
-        serviceTime = self.generateServingTime()
+        serviceTime = self.generateServingTime(customer)
         waitingTime = clock - customer.getCurrentArrivalTime()
         departureTime = clock + serviceTime
 
@@ -65,8 +66,9 @@ class Teller():
         return self.name
 
 
-    def generateServingTime(self):                                #function to generate service time for teller 1 using inverse trnasform
-        return (-np.log(1-(np.random.uniform(low=0.0,high=1.0))) * 1.2)
+    def generateServingTime(self, customer):   
+                         #function to generate service time for teller 1 using inverse trnasform
+        return self.processingTimes[TYPES.index(customer.getType())]
 
     def getQueue(self):
         return self.queue.getQueue()

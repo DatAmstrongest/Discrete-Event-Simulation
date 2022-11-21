@@ -11,8 +11,10 @@ class Simulation ():
         self.clock = 0
         self.tellers = []
         self.sortedTellers = []
+        self.servingTimes = [[1,2,1,3],[2,1,1,2],[1,3,3,2],[2,3,2,3]]
         for i in range(tellerNum):
-            teller = Teller(str(i))
+            servingTime = self.servingTimes[i]
+            teller = Teller(str(i), servingTime)
             self.tellers.append(teller)
             self.sortedTellers.append(teller)
          

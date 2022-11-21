@@ -13,6 +13,9 @@ class Customer ():
         self.finishedJobs = 0
         self.generateArrivalTime(clock)
         
+    def getType(self):
+        return self.type
+
 
     def getNextTeller(self):
         return self.type[self.finishedJobs]
