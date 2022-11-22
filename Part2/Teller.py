@@ -10,12 +10,16 @@ class Teller():
         self.queue = Queue()
         self.currentCustomer = None
         self.processingTimes = processingTimes
+        self.totalRemainingTime = 0
 
     def __lt__(self, U):
         if (self.getDepartureTime() < U.getDepartureTime()):
             return True
         return False
     
+    def getTotalRemainingTime(self):
+        return self.totalRemainingTime
+
 
     def getDepartureTime(self):
         if self.currentCustomer == None:
@@ -26,17 +30,16 @@ class Teller():
 
     def setCustomer(self, customer, clock):
         
-        serviceTime = self.generateServingTime(customer)
         waitingTime = clock - customer.getCurrentArrivalTime()
-        departureTime = clock + serviceTime
+        departureTime = clock + customer.getCurrentServiceTime()
 
         customer.addWaitingTime(waitingTime)
-        customer.addServiceTime(serviceTime)
         customer.addDepartureTime(departureTime)
 
         self.currentCustomer = customer
     
     def leaveCustomer(self):
+        self.totalRemainingTime -= self.currentCustomer.getCurrentServiceTime()
         self.currentCustomer.increaseFinishedJobs()
         leftCustomer = self.currentCustomer
         self.currentCustomer = None
@@ -54,7 +57,13 @@ class Teller():
 
     
     def addCustomerToQueue(self, customer):
+        serviceTime = self.generateServingTime(customer)
+
+        customer.addServiceTime(serviceTime)
         customer.addTeller(self.name)
+
+        self.totalRemainingTime += serviceTime
+
         self.queue.enqueueCustomer(customer)
 
 

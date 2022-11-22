@@ -20,6 +20,7 @@ class Simulation ():
          
         self.idleCustomer = None
         self.tellerNum = tellerNum
+        self.totalInSystem = 0
     
     def startSimulation(self,simulationTime):
         while self.clock <= simulationTime:
@@ -32,22 +33,28 @@ class Simulation ():
     def advanceTime(self): 
         if self.idleCustomer == None:
             type = random.sample(TYPES,1)[0]
-            self.idleCustomer = Customer(type,self.clock)
+            totalRemainingTime = 0
+            for teller in self.tellers:
+                totalRemainingTime += teller.getTotalRemainingTime()
+            self.idleCustomer = Customer(type,self.clock, self.totalInSystem, totalRemainingTime)
         heapq.heapify(self.sortedTellers)
 
         if self.idleCustomer.getCurrentArrivalTime() < self.sortedTellers[0].getDepartureTime(): 
             self.clock = self.idleCustomer.getCurrentArrivalTime()
             nextTeller = self.idleCustomer.getNextTeller()
             self.tellers[nextTeller].addCustomerToQueue(self.idleCustomer)
+            self.totalInSystem += 1
             self.idleCustomer = None
         else:
             self.clock = self.sortedTellers[0].getDepartureTime()
             customer = self.sortedTellers[0].leaveCustomer()
+            self.totalInSystem -= 1
             if customer.getFinishedJobs() < self.tellerNum:
                 customer.addArrivalTime(self.clock)
                 nextTeller = customer.getNextTeller()
 
                 self.tellers[nextTeller].addCustomerToQueue(customer)
+                self.totalInSystem += 1
             
         for teller in self.tellers:
             teller.getCustomerFromQueue(self.clock)

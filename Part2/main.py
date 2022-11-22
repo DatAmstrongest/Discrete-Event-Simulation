@@ -1,23 +1,29 @@
 
 from Simulation import Simulation
+from Customer import TYPES
 import csv
 
-def customer_to_tuple(customer):
-    return (customer.getTellers(), customer.getArrivalTimes(), customer.getServiceTimes(), customer.getDepartureTimes(), customer.getWaitingTimes())
 
 
 simulation = Simulation(4)
 results = simulation.startSimulation(240)
 
 
-customerHeader = ['TellerName', 'ArrivalTimes', 'ServiceTimes', 'DepartureTimes','WaitingTimes']
+customerHeader = ['JobType', 'ArrivalTime', 'CompletionTime', 'SumOfProcessTimes', "ENumInSys","TotalRemainingTimeOnArrive",'k']
 with open("customers.csv", "w") as streamCustomer:
     writer = csv.writer(streamCustomer)
     writer.writerow(customerHeader)
     for result in results:
         for customer in result:
-            if customer != None:
-                row = customer_to_tuple(customer)
-                writer.writerow(row)
+            if customer != None and len(customer.getDepartureTimes()) == len(TYPES):
+                jobType = TYPES.index(customer.getType())+1
+                arrivalTime = customer.getArrivalTimes()[0]
+                completionTime = customer.getDepartureTimes()[-1]
+                flowTime = completionTime - arrivalTime
+                theoreticalMinimumFlowTime = sum(customer.getType())
+                eNumInSys = customer.getNumInSystemOnArrive()
+                totalRemainingTime = customer.getRemainingTimeOnArrive()
+                k = flowTime/theoreticalMinimumFlowTime
+                writer.writerow((jobType, arrivalTime, completionTime, flowTime, theoreticalMinimumFlowTime, eNumInSys, totalRemainingTime, k))
 
 streamCustomer.close()

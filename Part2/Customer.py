@@ -3,7 +3,7 @@ import numpy as np
 TYPES = [[1,0,3,2],[3,1,2,0],[0,2,3,1],[2,1,0,3]]
 class Customer ():
 
-    def __init__(self, type, clock):
+    def __init__(self, type, clock, numInSystem, remainingTime):
         self.type = type
         self.arrivalTimes = []
         self.departureTimes = []
@@ -11,8 +11,19 @@ class Customer ():
         self.serviceTimes = []
         self.tellers = []
         self.finishedJobs = 0
+        self.numInSystemOnArrive = numInSystem
+        self.remainingTimeOnArrive = remainingTime
         self.generateArrivalTime(clock)
+
+
+    def getRemainingTimeOnArrive(self):
+        return self.remainingTimeOnArrive
         
+
+    def  getNumInSystemOnArrive(self):
+        return self.numInSystemOnArrive
+    
+
     def getType(self):
         return self.type
 
