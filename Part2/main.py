@@ -9,7 +9,7 @@ simulation = Simulation(4)
 results = simulation.startSimulation(240)
 
 
-customerHeader = ['JobType', 'ArrivalTime', 'CompletionTime', 'SumOfProcessTimes', "ENumInSys","TotalRemainingTimeOnArrive",'k']
+customerHeader = ['JobType', 'ArrivalTime', 'CompletionTime',"flowTime", 'SumOfProcessTimes', "ENumInSys","TotalRemainingTimeOnArrive",'k']
 with open("customers.csv", "w") as streamCustomer:
     writer = csv.writer(streamCustomer)
     writer.writerow(customerHeader)
